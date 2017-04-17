@@ -1,6 +1,7 @@
 # This is the Project main file
 
 library(reshape2)
+library(memisc) # for codebook generation
 
 filename <- "getdata_UCI_HAR_dataset.zip"
 
@@ -23,8 +24,8 @@ features[,2] <- as.character(features[,2])
 # Extract only the data on mean and standard deviation
 featuresWanted <- grep("mean\\(\\)|std\\(\\)",features[,2])
 featureNames <- features[featuresWanted,2]
-featureNames <- gsub('-mean', 'Mean', featureNames)
-featureNames <- gsub('-std', 'Std', featureNames)
+featureNames = gsub('-mean', 'Mean', featureNames)
+featureNames = gsub('-std', 'Std', featureNames)
 featureNames <- gsub('[-()]', '', featureNames)
 
 
@@ -54,3 +55,5 @@ FinalTidyData <- dcast(MergedData.melted, subject + activity ~ variable, mean)
 # Write the dataset to a txt file
 write.table(FinalTidyData, "tidy.txt", row.names = FALSE, quote = FALSE)
 
+#generate a code book
+Write(codebook(FinalTidyData),  file="Codebook.md")
